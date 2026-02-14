@@ -87,43 +87,34 @@ These metrics provide a comprehensive assessment of classification performance, 
 
 | ML Model               | Accuracy | Precision | Recall | F1 Score | MCC  | AUC  |
 |------------------------|----------|----------|--------|----------|------|------|
-| Logistic Regression    | 0.81     | 0.66     | 0.54   | 0.59     | 0.45 | 0.78 |
-| Decision Tree          | 0.79     | 0.60     | 0.58   | 0.59     | 0.43 | 0.75 |
-| kNN                    | 0.77     | 0.56     | 0.50   | 0.53     | 0.36 | 0.72 |
-| Naive Bayes            | 0.76     | 0.52     | 0.62   | 0.56     | 0.38 | 0.73 |
-| Random Forest          | 0.84     | 0.72     | 0.63   | 0.67     | 0.55 | 0.83 |
-| XGBoost                | 0.86     | 0.75     | 0.68   | 0.71     | 0.60 | 0.86 |
+| Logistic Regression    | 0.81     | 0.54     | 0.58   | 0.56     | 0.44 | 0.89 |
+| Decision Tree          | 0.88     | 0.73     | 0.68   | 0.70     | 0.63 | 0.91 |
+| kNN                    | 0.84     | 0.65     | 0.46   | 0.54     | 0.45 | 0.83 |
+| Naive Bayes            | 0.77     | 0.47     | 0.80   | 0.59     | 0.48 | 0.87 |
+| Random Forest          | 0.85     | 0.72     | 0.43   | 0.54     | 0.48 | 0.90 |
+| XGBoost                | 0.82     | 1.00     | 0.14   | 0.25     | 0.34 | 0.91 |
 
 ---
 
 # **Observations on Model Performance:**
 
-**Logistic Regression:**
-Logistic Regression provides a baseline linear classifier. While it achieves reasonable accuracy, its lower recall and MCC indicate limited capability in modeling nonlinear interactions among financial variables. Linear decision boundaries are insufficient for capturing complex repayment behavior patterns.
-
-**Decision Tree:**
-The Decision Tree captures nonlinear feature interactions and hierarchical decision rules. However, it exhibits moderate generalization performance and may suffer from variance due to sensitivity to training data splits.
-
-**k-Nearest Neighbors (kNN):**
-kNN demonstrates moderate classification performance. Its effectiveness depends heavily on distance metrics and feature scaling. High dimensionality and correlated financial attributes reduce its discriminative capability.
-
-**Naive Bayes:**
-Gaussian Naive Bayes provides efficient probabilistic classification. However, the strong assumption of feature independence limits its performance since financial features such as billing amounts and payment history are correlated.
-
-**Random Forest:**
-Random Forest significantly improves performance through ensemble learning and variance reduction. By aggregating multiple decision trees trained on bootstrapped samples, it enhances stability and generalization capability.
-
-**XGBoost:**
-XGBoost achieves the highest overall performance, including superior AUC and MCC values. Gradient boosting sequentially minimizes residual errors, effectively capturing complex nonlinear relationships and optimizing the bias-variance tradeoff.
+| ML Model Name           | Observation about model performance                                                                                                                                                                                                                                                                                                                                                 |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Logistic Regression** | Achieved good baseline performance (Accuracy ≈ 81%, AUC ≈ 0.89) with moderate MCC (0.44). This indicates that the dataset has a degree of linear separability. However, compared to tree-based models, Logistic Regression shows lower balanced performance, suggesting that purely linear decision boundaries are insufficient to fully capture nonlinear financial risk patterns. |
+| **Decision Tree**       | Best overall performer (Accuracy ≈ 88%, MCC ≈ 0.63, AUC ≈ 0.91) with balanced precision and recall. The model effectively captures nonlinear feature interactions and demonstrates strong class discrimination. Its high F1-score and MCC indicate reliable and well-balanced predictions across both classes.                                                                      |
+| **kNN**                 | Demonstrates moderate performance (Accuracy ≈ 84%, AUC ≈ 0.83). While precision is reasonable, recall is comparatively lower, indicating sensitivity to distance metrics and feature scaling. The model performs adequately but does not outperform tree-based approaches in this dataset.                                                                                          |
+| **Naive Bayes**         | Shows good recall (≈ 0.80) but relatively lower precision (≈ 0.47), indicating a tendency to predict the positive class more frequently. The independence assumption between features limits overall performance, though AUC remains strong (≈ 0.87), suggesting good probability ranking capability.                                                                               |
+| **Random Forest**       | Achieves strong performance (Accuracy ≈ 85%, AUC ≈ 0.90) with improved precision compared to Logistic Regression and kNN. Ensemble learning reduces variance and enhances probability ranking, though recall is slightly lower compared to Decision Tree. Overall, it provides stable and reliable classification.                                                                  |
+| **XGBoost**             | Exhibits excellent ranking performance (AUC ≈ 0.91) and very high precision (1.00), indicating that when it predicts default, it is highly confident. However, low recall (≈ 0.14) suggests conservative classification behavior at the chosen threshold. This indicates strong probability modeling but requires threshold tuning for balanced classification performance.         |
 
 ---
 
 # **Final Conclusion:**
 
-The comparative analysis indicates that ensemble-based methods outperform individual classifiers in credit default prediction tasks.
+Among all the evaluated models, Decision Tree achieved the best overall balanced performance, with the highest accuracy, F1-score, MCC, and strong AUC. This indicates that the dataset contains nonlinear relationships that are effectively captured by tree-based learning.
 
-XGBoost achieved the best overall performance due to its gradient boosting framework and strong regularization capability. Random Forest also demonstrated robust and stable results with improved generalization.
+Random Forest and XGBoost demonstrated excellent probability ranking capability (AUC > 0.90), confirming the strength of ensemble learning methods. However, XGBoost exhibited conservative classification behavior at the default threshold, leading to lower recall despite strong ranking performance.
 
-Linear and probabilistic models such as Logistic Regression and Naive Bayes serve as baseline approaches but are limited in capturing complex nonlinear financial dependencies.
+Logistic Regression provided a solid baseline, confirming partial linear separability within the dataset, while Naive Bayes achieved high recall but lower precision due to its independence assumptions. kNN showed moderate performance but did not outperform tree-based methods.
 
-Therefore, ensemble learning techniques are recommended for practical deployment in financial risk modeling systems.
+Overall, Decision Tree is the most suitable model for this dataset based on balanced evaluation metrics, while ensemble models remain strong alternatives for applications requiring high ranking performance and probability estimation accuracy.

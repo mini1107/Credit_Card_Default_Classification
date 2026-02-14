@@ -23,8 +23,7 @@ class LogisticRegression:
             self.bias -= self.lr * db
 
     def predict_proba(self, X):
-        linear = np.dot(X, self.weights) + self.bias
-        return self.sigmoid(linear)
+        return self.sigmoid(np.dot(X, self.weights) + self.bias)
 
     def predict(self, X):
         return (self.predict_proba(X) >= 0.5).astype(int)

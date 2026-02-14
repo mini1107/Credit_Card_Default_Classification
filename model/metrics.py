@@ -36,14 +36,8 @@ def matthews_corrcoef(y_true, y_pred):
 
 
 def roc_auc_score(y_true, y_prob):
-
-    y_true = np.array(y_true)
-    y_prob = np.array(y_prob)
-
-    y_true = y_true.reshape(-1)
-    y_prob = y_prob.reshape(-1)
-
-    y_prob = y_prob.astype(float)
+    y_true = np.array(y_true).reshape(-1)
+    y_prob = np.array(y_prob).reshape(-1).astype(float)
 
     sorted_indices = np.argsort(y_prob)
     y_true = y_true[sorted_indices]

@@ -31,5 +31,4 @@ class GaussianNB:
         return np.array(probs)
 
     def predict(self, X):
-        proba = self.predict_proba(X)
-        return (proba >= 0.5).astype(int)
+        return (self.predict_proba(X) >= 0.5).astype(int)

@@ -1,8 +1,10 @@
 import numpy as np
 
 class DecisionTree:
-    def __init__(self, max_depth=5):
+    def __init__(self, max_depth=3, min_samples_split=20, max_features=None):
         self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.max_features = max_features
 
     def gini(self, y):
         classes = np.unique(y)
@@ -13,18 +15,41 @@ class DecisionTree:
         return impurity
 
     def split(self, X, y, depth):
-        if depth >= self.max_depth or len(np.unique(y)) == 1:
-            return np.mean(y)  # probability at leaf
+
+        # Stopping conditions
+        if (depth >= self.max_depth or
+            len(np.unique(y)) == 1 or
+            len(y) < self.min_samples_split):
+            return np.mean(y)
+
+        n_features = X.shape[1]
+
+        # Random feature sampling (important for RF)
+        if self.max_features:
+            features = np.random.choice(n_features, self.max_features, replace=False)
+        else:
+            features = range(n_features)
 
         best_feature = None
         best_threshold = None
         best_gain = -1
 
-        for feature in range(X.shape[1]):
-            thresholds = np.unique(X[:, feature])
+        for feature in features:
+
+            values = np.unique(X[:, feature])
+
+            # Limit threshold candidates
+            if len(values) > 15:
+                thresholds = np.linspace(values.min(), values.max(), 15)
+            else:
+                thresholds = values
+
             for t in thresholds:
-                left = y[X[:, feature] <= t]
-                right = y[X[:, feature] > t]
+                left_mask = X[:, feature] <= t
+                right_mask = X[:, feature] > t
+
+                left = y[left_mask]
+                right = y[right_mask]
 
                 if len(left) == 0 or len(right) == 0:
                     continue
@@ -66,5 +91,4 @@ class DecisionTree:
         return np.array([self.predict_sample(x, self.tree) for x in X])
 
     def predict(self, X):
-        proba = self.predict_proba(X)
-        return (proba >= 0.5).astype(int)
+        return (self.predict_proba(X) >= 0.5).astype(int)
