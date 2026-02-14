@@ -87,12 +87,12 @@ These metrics provide a comprehensive assessment of classification performance, 
 
 | ML Model               | Accuracy | Precision | Recall | F1 Score | MCC  | AUC  |
 |------------------------|----------|----------|--------|----------|------|------|
-| Logistic Regression    | 0.81     | 0.66     | 0.54   | 0.59     | 0.45 | 0.78 |
-| Decision Tree          | 0.79     | 0.60     | 0.58   | 0.59     | 0.43 | 0.75 |
-| kNN                    | 0.77     | 0.56     | 0.50   | 0.53     | 0.36 | 0.72 |
-| Naive Bayes            | 0.76     | 0.52     | 0.62   | 0.56     | 0.38 | 0.73 |
-| Random Forest          | 0.84     | 0.72     | 0.63   | 0.67     | 0.55 | 0.83 |
-| XGBoost                | 0.86     | 0.75     | 0.68   | 0.71     | 0.60 | 0.86 |
+| Logistic Regression    | 0.49     | 0.49     | 0.97   | 0.65     | 0.03 | 0.51 |
+| Decision Tree          | 0.64     | 0.61     | 0.69   | 0.65     | 0.28 | 0.30 |
+| kNN                    | 0.65     | 0.65     | 0.63   | 0.64     | 0.30 | 0.28 |
+| Naive Bayes            | 0.58     | 0.57     | 0.53   | 0.55     | 0.15 | 0.39 |
+| Random Forest          | 0.80     | 0.83     | 0.74   | 0.78     | 0.61 | 0.10 |
+| XGBoost                | 0.48     | 0.48     | 1.00   | 0.65     | 0.00 | 0.40 |
 
 ---
 
