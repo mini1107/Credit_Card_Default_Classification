@@ -73,7 +73,16 @@ if data is not None:
         model.fit(X, y)
         y_pred = model.predict(X)
 
+    if hasattr(model, "predict_proba"):
+        y_prob = model.predict_proba(X)
+    else:
+        y_prob = y_pred  # fallback
 
+    auc = roc_auc_score(y, y_prob)
+
+    # ==============================
+    # EVALUATION METRICS TABLE
+    # ==============================
     st.subheader("📊 Model Evaluation Metrics")
 
     acc = accuracy_score(y, y_pred)
@@ -83,11 +92,10 @@ if data is not None:
     mcc = matthews_corrcoef(y, y_pred)
 
     metrics_df = pd.DataFrame({
-        "Metric": ["Accuracy", "Precision", "Recall", "F1 Score", "MCC"],
-        "Score": [acc, prec, rec, f1, mcc]
+        "Metric": ["Accuracy", "Precision", "Recall", "F1 Score", "MCC", "AUC"],
+        "Score": [acc, prec, rec, f1, mcc, auc]
     })
 
-    # Better UI styling
     st.dataframe(
         metrics_df.style
         .format({"Score": "{:.4f}"})
@@ -95,6 +103,9 @@ if data is not None:
         use_container_width=True
     )
 
+    # ==============================
+    # CONFUSION MATRIX
+    # ==============================
     st.subheader("📌 Confusion Matrix")
 
     tp, tn, fp, fn = confusion_matrix(y, y_pred)
@@ -108,39 +119,37 @@ if data is not None:
     for (i, j), val in np.ndenumerate(cm):
         ax.text(j, i, f"{val}", ha='center', va='center')
 
-    ax.set_xticklabels([''] + ["Pred 0", "Pred 1"])
-    ax.set_yticklabels([''] + ["Actual 0", "Actual 1"])
+    ax.set_xticks([0, 1])
+    ax.set_yticks([0, 1])
+    ax.set_xticklabels(["Pred 0", "Pred 1"])
+    ax.set_yticklabels(["Actual 0", "Actual 1"])
     plt.colorbar(cax)
 
     st.pyplot(fig)
 
+    # ==============================
+    # ROC CURVE
+    # ==============================
     st.subheader("📈 ROC Curve")
 
-# For ROC, we need probability scores
-if hasattr(model, "predict_proba"):
-    y_prob = model.predict_proba(X)
-else:
-    y_prob = y_pred
+    thresholds = np.linspace(0, 1, 100)
+    tpr_list = []
+    fpr_list = []
 
-# Calculate TPR & FPR manually
-thresholds = np.linspace(0, 1, 100)
-tpr_list = []
-fpr_list = []
+    for thresh in thresholds:
+        y_temp = (y_prob >= thresh).astype(int)
+        tp, tn, fp, fn = confusion_matrix(y, y_temp)
 
-for thresh in thresholds:
-    y_temp = (y_prob >= thresh).astype(int)
-    tp, tn, fp, fn = confusion_matrix(y, y_temp)
+        tpr = tp / (tp + fn + 1e-10)
+        fpr = fp / (fp + tn + 1e-10)
 
-    tpr = tp / (tp + fn + 1e-10)
-    fpr = fp / (fp + tn + 1e-10)
+        tpr_list.append(tpr)
+        fpr_list.append(fpr)
 
-    tpr_list.append(tpr)
-    fpr_list.append(fpr)
+    fig2, ax2 = plt.subplots()
+    ax2.plot(fpr_list, tpr_list)
+    ax2.set_xlabel("False Positive Rate")
+    ax2.set_ylabel("True Positive Rate")
+    ax2.set_title(f"ROC Curve (AUC = {auc:.4f})")
 
-fig2, ax2 = plt.subplots()
-ax2.plot(fpr_list, tpr_list)
-ax2.set_xlabel("False Positive Rate")
-ax2.set_ylabel("True Positive Rate")
-ax2.set_title("ROC Curve")
-
-st.pyplot(fig2)
+    st.pyplot(fig2)
