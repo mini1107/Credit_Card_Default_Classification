@@ -36,6 +36,15 @@ def matthews_corrcoef(y_true, y_pred):
 
 
 def roc_auc_score(y_true, y_prob):
+
+    y_true = np.array(y_true)
+    y_prob = np.array(y_prob)
+
+    y_true = y_true.reshape(-1)
+    y_prob = y_prob.reshape(-1)
+
+    y_prob = y_prob.astype(float)
+
     sorted_indices = np.argsort(y_prob)
     y_true = y_true[sorted_indices]
 
@@ -45,5 +54,8 @@ def roc_auc_score(y_true, y_prob):
     tpr = cum_pos / (np.sum(y_true) + 1e-10)
     fpr = cum_neg / (np.sum(1 - y_true) + 1e-10)
 
-    auc = np.trapz(tpr, fpr)
+    auc = 0.0
+    for i in range(1, len(tpr)):
+        auc += (fpr[i] - fpr[i-1]) * (tpr[i] + tpr[i-1]) / 2
+
     return auc

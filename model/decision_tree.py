@@ -14,7 +14,7 @@ class DecisionTree:
 
     def split(self, X, y, depth):
         if depth >= self.max_depth or len(np.unique(y)) == 1:
-            return np.bincount(y).argmax()
+            return np.mean(y)  # probability at leaf
 
         best_feature = None
         best_threshold = None
@@ -40,7 +40,7 @@ class DecisionTree:
                     best_threshold = t
 
         if best_gain == -1:
-            return np.bincount(y).argmax()
+            return np.mean(y)
 
         left_mask = X[:, best_feature] <= best_threshold
         right_mask = X[:, best_feature] > best_threshold
@@ -62,5 +62,9 @@ class DecisionTree:
             return self.predict_sample(x, node["left"])
         return self.predict_sample(x, node["right"])
 
-    def predict(self, X):
+    def predict_proba(self, X):
         return np.array([self.predict_sample(x, self.tree) for x in X])
+
+    def predict(self, X):
+        proba = self.predict_proba(X)
+        return (proba >= 0.5).astype(int)

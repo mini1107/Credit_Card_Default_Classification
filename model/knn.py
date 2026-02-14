@@ -8,11 +8,15 @@ class KNN:
         self.X_train = X
         self.y_train = y
 
-    def predict(self, X):
-        predictions = []
+    def predict_proba(self, X):
+        probs = []
         for x in X:
             distances = np.sqrt(np.sum((self.X_train - x) ** 2, axis=1))
             k_indices = np.argsort(distances)[:self.k]
             k_labels = self.y_train[k_indices]
-            predictions.append(np.bincount(k_labels).argmax())
-        return np.array(predictions)
+            probs.append(np.mean(k_labels))
+        return np.array(probs)
+
+    def predict(self, X):
+        proba = self.predict_proba(X)
+        return (proba >= 0.5).astype(int)

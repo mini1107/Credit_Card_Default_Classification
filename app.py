@@ -73,12 +73,9 @@ if data is not None:
         model.fit(X, y)
         y_pred = model.predict(X)
 
-    if hasattr(model, "predict_proba"):
-        y_prob = model.predict_proba(X)
-    else:
-        y_prob = y_pred  # fallback
-
+    y_prob = model.predict_proba(X)
     auc = roc_auc_score(y, y_prob)
+
 
     # ==============================
     # EVALUATION METRICS TABLE

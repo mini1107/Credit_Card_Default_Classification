@@ -14,15 +14,22 @@ class GaussianNB:
             self.priors[c] = X_c.shape[0] / X.shape[0]
 
     def gaussian(self, x, mean, var):
-        return np.exp(-((x - mean) ** 2) / (2 * var)) / np.sqrt(2 * np.pi * var)
+        return np.exp(-((x - mean) ** 2) / (2 * var + 1e-10)) / np.sqrt(2 * np.pi * var + 1e-10)
 
-    def predict(self, X):
-        preds = []
+    def predict_proba(self, X):
+        probs = []
         for x in X:
             posteriors = []
             for c in self.classes:
                 prior = np.log(self.priors[c])
-                likelihood = np.sum(np.log(self.gaussian(x, self.mean[c], self.var[c]) + 1e-10))
+                likelihood = np.sum(np.log(self.gaussian(x, self.mean[c], self.var[c])))
                 posteriors.append(prior + likelihood)
-            preds.append(self.classes[np.argmax(posteriors)])
-        return np.array(preds)
+
+            exp_vals = np.exp(posteriors)
+            probs.append(exp_vals[1] / np.sum(exp_vals))
+
+        return np.array(probs)
+
+    def predict(self, X):
+        proba = self.predict_proba(X)
+        return (proba >= 0.5).astype(int)

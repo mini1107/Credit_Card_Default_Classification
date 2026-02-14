@@ -13,6 +13,10 @@ class RandomForest:
             tree.fit(X[indices], y[indices])
             self.trees.append(tree)
 
+    def predict_proba(self, X):
+        tree_probs = np.array([tree.predict_proba(X) for tree in self.trees])
+        return np.mean(tree_probs, axis=0)
+
     def predict(self, X):
-        tree_preds = np.array([tree.predict(X) for tree in self.trees])
-        return np.round(np.mean(tree_preds, axis=0)).astype(int)
+        proba = self.predict_proba(X)
+        return (proba >= 0.5).astype(int)
