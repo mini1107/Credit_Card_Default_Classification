@@ -1,148 +1,129 @@
-# 📘 Machine Learning Assignment 2  
-## Credit Card Default Prediction  
+# Credit Card Default Classification
+
+# **Problem Statement:**
+
+Credit risk assessment is a critical task in financial institutions, where inaccurate lending decisions may lead to significant financial losses. The objective of this study is to develop predictive models that estimate whether a customer will default on their next credit card payment.
+
+Financial institutions collect historical customer data including demographic attributes, repayment behavior, billing statements, and payment records. The goal is to analyze the relationship between these explanatory variables and the probability of default.
+
+Rather than predicting the exact unpaid amount, the task is formulated as a binary classification problem to predict default status for the next billing cycle.
+
+Target variable:
+
+0 → No Default  
+1 → Default  
+
+This problem involves learning complex nonlinear relationships between financial behavior patterns and default risk.
 
 ---
 
-## 1️⃣ Problem Statement
+# **Dataset Description:**
 
-Credit card default prediction is an important financial risk modeling problem.  
-Banks and financial institutions aim to predict whether a customer will default on their next credit card payment.
+## Dataset Overview:
 
-Early prediction helps in:
+• Approximately 30,000 customer records  
+• 23 input features  
+• 1 target variable: `default.payment.next.month`  
+• Slight class imbalance  
+• Structured financial and demographic dataset  
 
-- Reducing financial risk  
-- Improving credit approval strategies  
-- Identifying high-risk customers  
-- Enhancing decision-making processes  
+The dataset includes behavioral, demographic, and financial attributes describing each customer’s credit usage and repayment history.
 
-This project formulates the problem as a **binary classification task**:
+## Feature Categories:
 
-- `0` → No Default  
-- `1` → Default  
+**Financial Capacity**
+• LIMIT_BAL (Credit limit)
 
----
+**Demographic Attributes**
+• SEX  
+• EDUCATION  
+• MARRIAGE  
+• AGE  
 
-## 2️⃣ Dataset Description
+**Repayment History**
+• PAY_0 to PAY_6 (monthly repayment status)
 
-### 📊 Dataset: Credit Card Default Dataset
+**Billing Information**
+• BILL_AMT1 to BILL_AMT6 (monthly billed amounts)
 
-**Source:** UCI Machine Learning Repository / Kaggle  
+**Payment Information**
+• PAY_AMT1 to PAY_AMT6 (monthly payment amounts)
 
-**Total Instances:** 30,000  
-
-**Number of Features:** 23  
-
-### Important Features:
-
-- `LIMIT_BAL` – Credit limit  
-- `SEX`  
-- `EDUCATION`  
-- `MARRIAGE`  
-- `AGE`  
-- `PAY_0` to `PAY_6` – Repayment status  
-- `BILL_AMT1` to `BILL_AMT6` – Bill amounts  
-- `PAY_AMT1` to `PAY_AMT6` – Payment amounts  
-
-### Target Variable:
-
-`default.payment.next.month`
-
-- 0 → No Default  
-- 1 → Default  
+Repayment consistency and billing-payment gaps significantly influence default probability.
 
 ---
 
-## 3️⃣ Models Implemented
+# **Models Used:**
 
-The following classification models were implemented from scratch:
+The following classification models were implemented and evaluated on the same dataset:
 
 1. Logistic Regression  
 2. Decision Tree  
 3. k-Nearest Neighbors (kNN)  
 4. Gaussian Naive Bayes  
-5. Random Forest (Ensemble)  
-6. XGBoost (Gradient Boosting Ensemble)  
+5. Random Forest (Ensemble Learning)  
+6. XGBoost (Gradient Boosting Ensemble)
 
-All models were implemented manually without using scikit-learn classifiers.
+All models were implemented manually, and evaluation metrics were computed from scratch without external metric libraries.
 
 ---
 
-## 4️⃣ Evaluation Metrics
+# **Evaluation Metrics:**
 
-The following evaluation metrics were implemented from scratch:
+The following metrics were calculated:
 
-- Accuracy  
-- Precision  
-- Recall  
-- F1 Score  
-- AUC Score  
-- Matthews Correlation Coefficient (MCC)  
+• Accuracy  
+• Precision  
+• Recall  
+• F1 Score  
+• Matthews Correlation Coefficient (MCC)  
+• Area Under the ROC Curve (AUC)
 
-### Example: Accuracy Implementation
+These metrics provide a comprehensive assessment of classification performance, particularly under potential class imbalance conditions.
 
-```python
-def accuracy_score(y_true, y_pred):
-    return np.mean(y_true == y_pred)
+---
 
-| ML Model            | Accuracy | AUC  | Precision | Recall | F1   | MCC  |
-| ------------------- | -------- | ---- | --------- | ------ | ---- | ---- |
-| Logistic Regression | 0.81     | 0.78 | 0.66      | 0.54   | 0.59 | 0.45 |
-| Decision Tree       | 0.79     | 0.75 | 0.60      | 0.58   | 0.59 | 0.43 |
-| kNN                 | 0.77     | 0.72 | 0.56      | 0.50   | 0.53 | 0.36 |
-| Naive Bayes         | 0.76     | 0.73 | 0.52      | 0.62   | 0.56 | 0.38 |
-| Random Forest       | 0.84     | 0.83 | 0.72      | 0.63   | 0.67 | 0.55 |
-| XGBoost             | 0.86     | 0.86 | 0.75      | 0.68   | 0.71 | 0.60 |
+# **Model Comparison Table:**
 
-## 6️⃣ Observations
+| ML Model               | Accuracy | Precision | Recall | F1 Score | MCC  | AUC  |
+|------------------------|----------|----------|--------|----------|------|------|
+| Logistic Regression    | 0.81     | 0.66     | 0.54   | 0.59     | 0.45 | 0.78 |
+| Decision Tree          | 0.79     | 0.60     | 0.58   | 0.59     | 0.43 | 0.75 |
+| kNN                    | 0.77     | 0.56     | 0.50   | 0.53     | 0.36 | 0.72 |
+| Naive Bayes            | 0.76     | 0.52     | 0.62   | 0.56     | 0.38 | 0.73 |
+| Random Forest          | 0.84     | 0.72     | 0.63   | 0.67     | 0.55 | 0.83 |
+| XGBoost                | 0.86     | 0.75     | 0.68   | 0.71     | 0.60 | 0.86 |
 
-### 🔹 Logistic Regression (Baseline Linear Model)
+---
 
-- Provides stable baseline performance  
-- Assumes linear relationship between features and target  
-- Limited in capturing nonlinear financial behavior  
+# **Observations on Model Performance:**
 
-### 🔹 Decision Tree (Moderate Performance)
+**Logistic Regression:**
+Logistic Regression provides a baseline linear classifier. While it achieves reasonable accuracy, its lower recall and MCC indicate limited capability in modeling nonlinear interactions among financial variables. Linear decision boundaries are insufficient for capturing complex repayment behavior patterns.
 
-- Captures nonlinear relationships  
-- Easy to interpret  
-- Prone to overfitting  
-- Moderate generalization performance  
+**Decision Tree:**
+The Decision Tree captures nonlinear feature interactions and hierarchical decision rules. However, it exhibits moderate generalization performance and may suffer from variance due to sensitivity to training data splits.
 
-### 🔹 kNN (Sensitive to Scaling)
+**k-Nearest Neighbors (kNN):**
+kNN demonstrates moderate classification performance. Its effectiveness depends heavily on distance metrics and feature scaling. High dimensionality and correlated financial attributes reduce its discriminative capability.
 
-- Distance-based model  
-- Performance depends on feature scaling  
-- Less effective in high-dimensional datasets  
+**Naive Bayes:**
+Gaussian Naive Bayes provides efficient probabilistic classification. However, the strong assumption of feature independence limits its performance since financial features such as billing amounts and payment history are correlated.
 
-### 🔹 Naive Bayes (Independence Assumption)
+**Random Forest:**
+Random Forest significantly improves performance through ensemble learning and variance reduction. By aggregating multiple decision trees trained on bootstrapped samples, it enhances stability and generalization capability.
 
-- Fast and computationally efficient  
-- Assumes features are independent  
-- Financial variables are correlated, limiting performance  
+**XGBoost:**
+XGBoost achieves the highest overall performance, including superior AUC and MCC values. Gradient boosting sequentially minimizes residual errors, effectively capturing complex nonlinear relationships and optimizing the bias-variance tradeoff.
 
-### 🔹 Random Forest (Better Generalization)
+---
 
-- Ensemble of multiple decision trees  
-- Reduces variance  
-- Improves stability and accuracy  
-- Better generalization than single tree  
+# **Final Conclusion:**
 
-### 🔹 XGBoost (Best Overall Performance)
+The comparative analysis indicates that ensemble-based methods outperform individual classifiers in credit default prediction tasks.
 
-- Gradient boosting technique  
-- Sequentially reduces prediction errors  
-- Achieved highest AUC and MCC  
-- Best suited for complex financial risk modeling
+XGBoost achieved the best overall performance due to its gradient boosting framework and strong regularization capability. Random Forest also demonstrated robust and stable results with improved generalization.
 
-Streamlit Application Features
+Linear and probabilistic models such as Logistic Regression and Naive Bayes serve as baseline approaches but are limited in capturing complex nonlinear financial dependencies.
 
-The developed Streamlit web application provides an interactive interface to evaluate and compare classification models.
-
-The application includes:
-
- - Dataset upload functionality (CSV format)
- - Model selection dropdown for all six implemented models
- - Display of evaluation metrics including Accuracy, Precision, Recall, F1 Score, AUC, and MCC
- - Confusion matrix visualization
- - ROC curve visualization
- - Clean and structured dashboard layout
+Therefore, ensemble learning techniques are recommended for practical deployment in financial risk modeling systems.
