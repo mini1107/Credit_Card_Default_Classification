@@ -21,13 +21,13 @@ This problem involves learning complex nonlinear relationships between financial
 
 ## Dataset Overview:
 
-• Approximately 30,000 customer records  
-• 23 input features  
-• 1 target variable: `default.payment.next.month`  
-• Slight class imbalance  
-• Structured financial and demographic dataset  
+• 1000 customer records
+• 23 input features
+• 1 target variable: default.payment.next.month
+• Approximately 22% default rate (class imbalance)
+• Structured financial and demographic dataset
 
-The dataset includes behavioral, demographic, and financial attributes describing each customer’s credit usage and repayment history.
+The dataset is a structured synthetic financial dataset designed to simulate realistic credit risk behavior. It incorporates meaningful correlations between repayment history, billing amounts, payment ratios, and default probability.
 
 ## Feature Categories:
 
@@ -64,7 +64,7 @@ The following classification models were implemented and evaluated on the same d
 5. Random Forest (Ensemble Learning)  
 6. XGBoost (Gradient Boosting Ensemble)
 
-All models were implemented manually, and evaluation metrics were computed from scratch without external metric libraries.
+All models were implemented manually. Evaluation metrics were initially implemented from scratch and later validated using scikit-learn to ensure numerical correctness and reliability.
 
 ---
 
